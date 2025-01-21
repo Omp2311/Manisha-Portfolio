@@ -89,19 +89,19 @@
 			<section id="about" class="dark_bg section-padding">
 				<div class="container">
 					<h2 class="section-title wow flipInX" data-wow-delay="0.4s">About<span> Me</span></h2>
-					<div class="  flex flex-col md:flex-row items-center d-flex" style="display: flex; align-items:right;">
-						
-						<div style="flex: 0 0 30%; display: flex; justify-content: center;">
+					<div class="section-img-text wow flipInX d-flex flex-column flex-md-row align-items-center justify-content-between">
+				
+						<!-- Image Section -->
+						<div class="image-container text-center mb-4 mb-md-0" style="flex: 1;">
 							<img 
 								alt="Portrait of Manisha, a web designer, smiling at the camera" 
-								class="md:w-7 "
-								
+								class="profile-image" 
 								src="01.jpg"
-								style="width: 200px;  height: 180; display:center; margin:auto; border-radius: 10px;" 
 							/>
 						</div>
-					
-						<div style="flex: 0 100% 40%; ">
+				
+						<!-- Text Section -->
+						<div class="text-container" style="flex: 2;">
 							<p class="text-white">
 								As a passionate web designer, I specialize in creating visually stunning and user-friendly designs that leave a lasting impression. 
 								My design philosophy centers around blending creativity with functionality to craft seamless digital experiences. With a keen eye 
@@ -110,8 +110,52 @@
 								bring brands to life through innovative design and exceptional user experiences.
 							</p>
 						</div>
+				
 					</div>
 				</div>
+				
+				<style>
+				.container {
+					padding: 0px;
+				}
+				.section-title {
+					text-align: center;
+					margin-bottom: 20px;
+				}
+				.section-img-text {
+					gap: 20px;
+
+				}
+				.profile-image {
+					width: 200px;
+					height: 327px;
+					border-radius: 5%;
+					object-fit: contain;
+				}
+				.text-container {
+					text-align: justify;
+				}
+				
+				/* Responsive Adjustments */
+				@media (max-width: 768px) {
+					.section-img-text {
+						flex-direction: column;
+						text-align: top;
+					}
+					.profile-image {
+						margin: 0 auto 20px;
+						height:300px
+					}
+				}
+				
+				@media (min-width: 768px) {
+					.section-img-text {
+						flex-direction: row;
+						align-items: center;
+					}
+				}
+				</style>
+				
 			</section>
 			
 						
