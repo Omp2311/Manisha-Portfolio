@@ -3,44 +3,61 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
-    $name = $_POST['name'] ;
-    $email = $_POST['email'] ;
-    $subject = $_POST['subject'] ;
-    $message = $_POST['message'] ;
-} else {
-    die("Form not submitted properly!");
-}
-
-
 require 'PhpMailer/Exception.php';
 require 'PhpMailer/PHPMailer.php';
 require 'PhpMailer/SMTP.php';
 
-$mail = new PHPMailer(true);
+// Check if REQUEST_METHOD is set before using it
+if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
+    echo "<pre>";
+    print_r($_POST); // Debugging - Check if form data is received
+    echo "</pre>";
 
-try {
-    //Server settings
-    $mail->isSMTP();
-    $mail->Host       = 'smtp.gmail.com';
-    $mail->SMTPAuth   = true;
-    $mail->Username   = 'omprakashraj100078@gmail.com';
-    $mail->Password   = 'flvs krld izwy rics'; // Use Google App Password
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-    $mail->Port       = 587;
+    if (isset($_POST['submit'])) {
+        $name = htmlspecialchars($_POST['name']);
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $subject = htmlspecialchars($_POST['subject']);
+        $message = htmlspecialchars($_POST['message']);
 
-    //Recipients
-    $mail->setFrom('2101743.cse.cec@cgc.edu.in', 'Contact form');
-    $mail->addAddress('omprakashraj100078@gmail.com', 'Portfolio');
+        if (empty($name) || empty($email) || empty($subject) || empty($message)) {
+            die("All fields are required!");
+        }
 
-    //Content
-    $mail->isHTML(true);
-    $mail->Subject = $subject;
-    $mail->Body    = "Sender Name: $name <br> Sender Email: $email <br> Subject: $subject <br> Message: $message <br>";
+        $mail = new PHPMailer(true);
 
-    $mail->send();
-    echo 'Message has been sent';
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        try {
+            // SMTP Configuration
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'omprakashraj100078@gmail.com'; // Corrected
+            $mail->Password   = 'flvs krld izwy rics'; // Use Google App Password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+
+            // Sender & Recipient
+            $mail->setFrom('omprakashraj100078@gmail.com', 'Contact Form');
+            $mail->addAddress('elitehouse2002@gmail.com', 'Portfolio');
+
+            // Email Content
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = "
+                <strong>Sender Name:</strong> $name <br>
+                <strong>Sender Email:</strong> $email <br>
+                <strong>Subject:</strong> $subject <br>
+                <strong>Message:</strong> $message <br>
+            ";
+
+            $mail->send();
+            echo '<script>alert("Message sent successfully!"); window.location.href="contact.html";</script>';
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+    } else {
+        die("Submit button not clicked properly!");
+    }
+} else {
+    die("Form must be submitted via a web browser!");
 }
 ?>
